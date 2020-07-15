@@ -1,0 +1,90 @@
+<div class="row">
+    <h1 class="col-md-4 ">Last Sold Items</h1>
+    <input ng-model="search.$" hidden>
+    <div class="col-md-3 ">
+        <div class="form-group has-feedback" style="margin-top:25px">
+            <input type="text" class=" form-control " ng-model="search._id" placeholder="Serach Receipt Id">
+            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+        </div>
+    </div>
+    <div class="col-md-3 ">
+        <div class="form-group has-feedback" style="margin-top:25px">
+            <input type="text" class=" form-control " ng-model="search.customerName" placeholder="Serach By Name">
+            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+        </div>
+    </div>
+</div>
+<hr>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>Receipt Id</th>
+            <th>Customer</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Debit</th>
+            <th>Balance</th>
+            <th>Slip</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="sale in sales | filter:search ">
+            <td><button type="button" class="btn btn-sm btn-danger" ng-click="deleteSale(sale)">Delete</td>
+            <td>{{sale._id}}</td>
+            <td>{{sale.customerName}}</td>
+            <td>{{sale.totalQty}}</td>
+            <td>Rs {{sale.totalPrice}}</td>
+            <td>{{sale.debit}}</td>
+            <td> {{sale.totalPrice-sale.debit}} </td>
+            <td><button ng-click="showItems(sale)" class="btn btn-info">button</button></td>
+
+        </tr>
+    </tbody>
+</table>
+
+<modal title="Purchase Item" visible="showPaidModal">
+    <div print-section>
+        <h3 align="center">Sale Recipt</h3>
+        <hr>
+        <div class="row" style="font-weight: bold; margin-bottom:1%">
+            <p class="col-md-10"><strong>Receipt ID: </strong>{{slipId}}</p>
+            <p class="col-md-5" style="text-transform: capitalize;"><strong>Customer: </strong>{{Name}} </p>
+            <div class="col-md-2"></div>
+            <p class="col-md-5"><strong>Date: </strong> {{purDate}}</p>
+        </div>
+        <table class="table table-hover " col-resizeable>
+            <thead>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="show in showPurchaseItems">
+                    <td>{{show.date}}</td>
+                    <td>{{show.time}}</td>
+                    <td>{{show.itemName}}</td>
+                    <td>{{show.price}}</td>
+                    <td>{{show.purchasedQty}}</td>
+                    <td>{{show.price*show.purchasedQty}}</td>
+                    <td><span  ng-click="returnItem(show,slipId)" class="glyphicon glyphicon-share "></span></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-5"><strong>Total Price: </strong>{{tPrice}} Rs</div>
+            <div class="col-md-2"></div>
+            <div class="col-md-5"><strong>Paid Rs: </strong> {{dPrice}} Rs</div>
+        </div>
+        <hr>
+        <center>
+            <p><b>Thank You For Shopping!</b></p>
+            
+        </center>
+    </div>
+    <center><a ng-click="print()" class="btn btn-lg btn-success">Print</a></center>
+
+</modal>

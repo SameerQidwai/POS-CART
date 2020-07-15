@@ -1,0 +1,33 @@
+<div class="row">
+        <h3 class="col-md-3">Customer Detail</h3>
+        <input ng-model="search.$" hidden>
+        <div class="col-md-3 ">
+                <div class="form-group has-feedback" style="margin-top:25px">
+                        <input type="text" class=" form-control " ng-model="search.customerName" placeholder="Serach Name">
+                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                </div>
+        </div>
+</div>
+<hr>
+
+<div>
+        <table class="table table-hover ">
+                <thead>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>email</th>
+                        <th>Address</th>
+                        <th>Remove</th>
+                </thead>
+                <tbody>
+                        <tr ng-repeat="cust in custArray | filter: search">
+                                <td>{{cust.customerName}}</td>
+                                <td>{{cust.phone}}</td>
+                                <td>{{cust.email}}</td>
+                                <td>{{cust.address}}</td>
+                                <td style="padding-left:30px"ng-click="deleteCustumer(cust)"><i class="fa fa-times redicon"></i></td>
+                        </tr>
+                </tbody>
+
+        </table>
+</div>

@@ -1,0 +1,113 @@
+<div class="row">
+    <div class="col-lg-10">
+        <h1> Monthly Sale's Report</h1>
+    </div>
+</div>
+<hr>
+<div class="panel-body">
+    <div class='row'>
+        <span class="col-md-4">
+            <input type="month" ng-model="monthYear" class="form-control">
+        </span>
+        <button type="button" ng-click="generateReport(monthYear)" class="btn btn-md btn-success from-control">Generate
+            Report</button>
+    </div>
+    <br>
+    <hr>
+    <div class='row' ng-show="whenTable">
+
+        <div print-section>
+            <center><img src="/img/img1.png" alt="DressUP" style="width:25%"></center>
+            <center>
+                <div style="margin:0">
+                    <p style="margin:0"><strong>MUSTAFA HAKIMUDDIN</strong></p>
+                    <p style="margin:0"><strong>Phone: +923452652950</strong></p>
+                    <p style="margin:0"><strong>6.N.R.Avenue (Tapal Bldg) SD-I,Block-G <br>Barkat-e-Hyderi North
+                            Nazimabad,Karachi</strong></p>
+                </div>
+            </center>
+            <hr>
+            <h3 align="center">Sale's Report Receipt</h3>
+            <br />
+
+            <p align="left" ng-model="mdate">Date: {{mdate}} </p>
+
+            <hr />
+            <br />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Receipt Id</th>
+                        <th>Customer</th>
+                        <th>Total Price</th>
+                        <th>Debit</th>
+                        <th>Balance</th>
+                        <th>Purchased Item</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="sale in sales | filter:search ">
+                        <td>{{sale._id}}</td>
+                        <td>{{sale.customerName}}</td>
+                        <td>{{sale.barArray}}</td>
+                        <td>Rs {{sale.totalPrice}}</td>
+                        <td>{{sale.debit}}</td>
+                        <td> {{sale.totalPrice-sale.debit}} </td>
+                        <td><button ng-click="showItems(sale)" class="btn btn-info">button</button></td>
+
+                    </tr>
+                </tbody>
+            </table>
+            </br>
+            <hr />
+            <p align="center">**************** Monthly Report ****************</p>
+
+        </div>
+        <center><a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a></center>
+    </div>
+</div>
+
+<modal title="Purchase Item" visible="showPaidModal">
+    <div print-section>
+        <h3 align="center">Sale Recipt</h3>
+        <hr>
+        <div class="row" style="font-weight: bold; margin-bottom:1%">
+            <p class="col-md-10"><strong>Receipt ID: </strong>{{slipId}}</p>
+            <p class="col-md-5" style="text-transform: capitalize;"><strong>Customer: </strong>{{Name}} </p>
+            <div class="col-md-2"></div>
+            <p class="col-md-5"><strong>Date: </strong> {{purDate}}</p>
+        </div>
+        <table class="table table-hover " col-resizeable>
+            <thead>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="show in showPurchaseItems">
+                    <td>{{show.date}}</td>
+                    <td>{{show.time}}</td>
+                    <td>{{show.itemName}}</td>
+                    <td>{{show.price}}</td>
+                    <td>{{show.purchasedQty}}</td>
+                    <td>{{show.price*show.purchasedQty}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-5"><strong>Total Price: </strong>{{tPrice}} Rs</div>
+            <div class="col-md-2"></div>
+            <div class="col-md-5"><strong>Paid Rs: </strong> {{dPrice}} Rs</div>
+        </div>
+        <hr>
+        <center>
+            <p><b>Thank You For Shopping!</b></p>
+            
+        </center>
+    </div>
+    <center><a ng-click="print()" class="btn btn-lg btn-success">Print</a></center>
+
+</modal>

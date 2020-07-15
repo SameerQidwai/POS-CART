@@ -1,0 +1,420 @@
+<div class="row">
+    <h1 class="col-md-8" style="margin:10px">Point Of Sale</h1>
+    <button ng-click="Reload()" class="btn btn-sm btn-info col-md-2 "
+        style="float:right;margin: 26px auto;">Refresh</button>
+    <!-- /.col-lg-12 -->
+</div>
+<hr style="margin:0">
+<br />
+<br>
+<button ng-click="returnItem()" class="btn btn-sm btn-danger  col-md-2" style="float:left">Return</button>
+<!-- <button ng-click="sync()" class="btn btn-sm btn-danger col-md-2" style="float:right">Sync</button></div> -->
+<div class='row'>
+
+    <p align="center" ng-model="date"><strong>Date: </strong>{{date}} </p>
+    <p align="center" ng-model="mytime"><strong>Time:
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{mytime}} </p>
+
+
+</div>
+<div class="row">
+    <table class="table table-bordered table-hover table-striped" col-resizeable>
+        <thead>
+            <tr>
+                <th width="20%">Barcode</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th ng-show="showMe">Wholesale Price</th>
+                <th ng-click="Showed()">Retail Price</th>
+                <!-- <th> <input type="checkbox" ng-model="limit" ng-click="Showed()"> Retail Price</th> -->
+                <th>Total Sale</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="10%">
+                    <input type="text" class="form-control" ng-model="row1.id" ng-keydown="changedKey($event,row1,1)">{{row1.id}}
+                </td>
+                <td>{{row1.itemName}}</td>
+                <td>{{row1.itemDesc}}</td>
+                <td ng-show="showMe">Rs {{row1.itemWholesale}}</td>
+                <td>Rs {{row1.itemRetail}}</td>
+
+                <!-- <td width="10%"> <input type="number" ng-model="amount1" 
+                            ng-keydown="itemDiscount($event,amount1, 0)" placeholder="Rs {{row1.itemDiscount}}">
+                        <span ng-model="error[0]" style="color: red">{{error[0]}}</span> </td> -->
+                <!--Discount for per item -->
+
+                 <td width="20%" height="50%" rowspan="20">
+                    <p><strong>Discount Rs: </strong></p><input class="form-control" ng-model="discount" type="number"
+                            ng-keydown="addDiscount($event,discount)"></input>
+                        </br>
+                        </br>
+                            
+                    <!-- Discount by Rupees -->
+
+                    <p><strong>Discount %: </strong></p><input class="form-control"  ng-model="discountpercent" type="number"
+                        ng-keydown="addDiscountpercent($event,discountpercent)"></input>
+                        <!-- <p><strong>Discount %: </strong></p><select class="form-control" ng-model="disco" ng-options="percent as percent.name for percent in PERCENT"
+                        ng-change="addDiscountpercent(disco)"></select> -->
+                        <br/>
+                    <p><strong>Salsesman: </strong></p><select class="form-control" ng-model="selectedSalesman.salesmanId"
+                            ng-options="salesman.salesmanId as salesman.name for salesman in chooseSalesman"></select>
+                    </br>
+
+                    <p ng-model="totalQty"><strong>Total Items: </strong>{{totalQty}}</p>
+                    </br>
+                    </br>
+
+                    <p><strong>Cash Received:
+                        <button class="btn btn-xs btn-info "
+                        ng-click="refreshCash()"> <span class="glyphicon glyphicon-refresh"
+                            aria-hidden="true"></span></button>
+                    </strong></p>
+                        <input class="form-control"  ng-model="cash" type="number"
+                        ng-keydown="addCash($event,cash)"></input>
+                
+                    </div>
+                    </br>
+                    </br>
+                    <div ng-model="priceSum"
+                        style="text-align: center; border-radius: 25px;border: 2px solid #000000;padding: 20px; width: 200px;height: 200px; ">
+                        <h3>Sale</h3>
+                        <h1>Rs {{priceSum}}</h1>
+                    </div>
+                    </br>
+                    <div>
+                        <button type="button" ng-click="checkOut(selectedSalesman.salesmanId)" class="btn btn-lg btn-success "
+                            style="padding:25px 59px;">Checkout</button>
+                    </div>
+                </td>
+
+            </tr>
+            <tr>
+                <td width="10%"> <input type="text" class="form-control" ng-model="row2.id"
+                        ng-keydown="changedKey($event,row2,2)">{{row2.id}}</td>
+                <td>{{row2.itemName}}</td>
+                <td>{{row2.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row2.itemWholesale}}</td>
+                <td>Rs {{row2.itemRetail}}</td>
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row3.id"
+                        ng-keydown="changedKey($event,row3,3)">{{row3.id}}</td>
+                <td>{{row3.itemName}}</td>
+                <td>{{row3.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row3.itemWholesale}}</td>
+                <td>Rs {{row3.itemRetail}}</td>
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row4.id"
+                        ng-keydown="changedKey($event,row4,4)">{{row4.id}}</td>
+                <td>{{row4.itemName}}</td>
+                <td>{{row4.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row4.itemWholesale}}</td>
+                <td>Rs {{row4.itemRetail}}</td>
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row5.id"
+                        ng-keydown="changedKey($event,row5,5)">{{row5.id}}</td>
+                <td>{{row5.itemName}}</td>
+                <td>{{row5.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row5.itemWholesale}}</td>
+                <td>Rs {{row5.itemRetail}}</td>
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row6.id"
+                        ng-keydown="changedKey($event,row6,6)">{{row6.id}}</td>
+                <td>{{row6.itemName}}</td>
+                <td>{{row6.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row6.itemWholesale}}</td>
+                <td>Rs {{row6.itemRetail}}</td>
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row7.id"
+                        ng-keydown="changedKey($event,row7,7)">{{row7.id}}</td>
+                <td>{{row7.itemName}}</td>
+                <td>{{row7.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row7.itemWholesale}}</td>
+                <td>Rs {{row7.itemRetail}}</td>
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row8.id"
+                        ng-keydown="changedKey($event,row8,8)">{{row8.id}}</td>
+                <td>{{row8.itemName}}</td>
+                <td>{{row8.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row8.itemWholesale}}</td>
+                <td>Rs {{row8.itemRetail}}</td>
+
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row9.id"
+                        ng-keydown="changedKey($event,row9,9)">{{row9.id}}</td>
+                <td>{{row9.itemName}}</td>
+                <td>{{row9.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row9.itemWholesale}}</td>
+                <td>Rs {{row9.itemRetail}}</td>
+
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row10.id"
+                        ng-keydown="changedKey($event,row10,10)">{{row10.id}}</td>
+                <td>{{row10.itemName}}</td>
+                <td>{{row10.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row10.itemWholesale}}</td>
+                <td>Rs {{row10.itemRetail}}</td>
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row11.id"
+                        ng-keydown="changedKey($event,row11,11)">{{row11.id}}</td>
+                <td>{{row11.itemName}}</td>
+                <td>{{row11.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row11.itemWholesale}}</td>
+                <td>Rs {{row11.itemRetail}}</td>
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row12.id"
+                        ng-keydown="changedKey($event,row12,12)">{{row12.id}}</td>
+                <td>{{row12.itemName}}</td>
+                <td>{{row12.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row12.itemWholesale}}</td>
+                <td>Rs {{row12.itemRetail}}</td>
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row13.id"
+                        ng-keydown="changedKey($event,row13,13)">{{row13.id}}</td>
+                <td>{{row13.itemName}}</td>
+                <td>{{row13.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row13.itemWholesale}}</td>
+                <td>Rs {{row13.itemRetail}}</td>
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row14.id"
+                        ng-keydown="changedKey($event,row14,14)">{{row14.id}}</td>
+                <td>{{row14.itemName}}</td>
+                <td>{{row14.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row14.itemWholesale}}</td>
+                <td>Rs {{row14.itemRetail}}</td>
+
+            </tr>
+
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row15.id"
+                        ng-keydown="changedKey($event,row15,15)">{{row15.id}}</td>
+                <td>{{row15.itemName}}</td>
+                <td>{{row15.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row15.itemWholesale}}</td>
+                <td>Rs {{row15.itemRetail}}</td>
+
+            </tr>
+            <tr>
+                <td width="10%"> <input type="text" class="form-control"  ng-model="row16.id"
+                        ng-keydown="changedKey($event,row16,16)">{{row16.id}}</td>
+                <td>{{row17.itemName}}</td>
+                <td>{{row17.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row16.itemWholesale}}</td>
+                <td>Rs {{row16.itemRetail}}</td>
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text"  class="form-control" ng-model="row17.id"
+                        ng-keydown="changedKey($event,row17,17)">{{row17.id}}</td>
+                <td>{{row17.itemName}}</td>
+                <td>{{row17.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row17.itemWholesale}}</td>
+                <td>Rs {{row17.itemRetail}}</td>
+
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text"  class="form-control" ng-model="row18.id"
+                        ng-keydown="changedKey($event,row18,18)">{{row18.id}}</td>
+                <td>{{row18.itemName}}</td>
+                <td>{{row18.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row18.itemWholesale}}</td>
+                <td>Rs {{row18.itemRetail}}</td>
+
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row19.id"
+                        ng-keydown="changedKey($event,row19,19)">{{row19.id}}</td>
+                <td>{{row19.itemName}}</td>
+                <td>{{row19.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row19.itemWholesale}}</td>
+                <td>Rs {{row19.itemRetail}}</td>
+
+            </tr>
+            <tr>
+
+                <td width="10%"> <input type="text" class="form-control" ng-model="row20.id"
+                        ng-keydown="changedKey($event,row20,20)">{{row20.id}}</td>
+                <td>{{row20.itemName}}</td>
+                <td>{{row20.itemDesc}}</td>
+
+                <td ng-show="showMe">Rs {{row20.itemWholesale}}</td>
+                <td>Rs {{row20.itemRetail}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <!-- /.table-responsive -->
+</div>
+
+
+
+<modal  title="Sale Receipt" visible="showModal">
+    <div print-section>
+            <center><img  src="/img/img1.png" alt="DressUP" style="width:50%" ></center>
+            <center><div style="margin:0" >
+                <p style="font-size:21px" style="margin:0"><strong>Phone: +923452652950</strong></p>
+                <p style="font-size:21px" style="margin:0"><strong>6.N.R.Avenue (Tapal Bldg.) SD-I, Block-G <br>Barkat-e-Hyderi North Nazimabad, Karachi</strong></p>
+            </div>
+        </center>
+        <hr>
+        <h3 align="center">Sale Receipt</h3>
+        <br />
+
+        <p style="font-size:21px" align="left" ng-model="mdate"><strong>Date:</strong> {{mdate}} </p>
+        <p style="font-size:21px" align="left" ng-model="mtime"><strong>Time:</strong> {{mtime}} </p>
+        <p style="font-size:21px" ng-model="slipId"><strong>Receipt ID:</strong> {{slipId}}</p>
+        <p style="font-size:21px" style="text-transform: capitalize;"><strong>Salesman:</strong> {{SmanChoose}} </p>
+        <hr />
+        <br />
+        <table class="table table-hover ">
+            <thead style="border-bottom:2px solid">
+                <tr style="border-bottom:2px solid;">
+                    <th style="font-size:21px">Qty.</th>
+                    <th style="font-size:21px">Barcod</th>
+                    <th style="font-size:21px">Name&nbsp;&nbsp;&nbsp;</th>
+                    <th style="font-size:21px">Description</th>
+
+                    <th style="font-size:21px;">Price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
+                </tr>
+            </thead>
+            <tbody >
+                <tr ng-repeat='s in sold'>
+                    <td style="font-size:21px">1.0</td>
+                    <td style="font-size:21px">{{s.id}}</td>
+                    <td style="font-size:21px">{{s.name}}</td>
+                    <td style="font-size:21px">{{s.desc}}</td>
+                    <td style="font-size:21px">Rs {{s.retail}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="font-size:21px"><strong>Total Items:</strong></td>
+
+                    <td style="font-size:21px" ng-model="totalit">{{totalit}}</td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="font-size:21px"><strong>Discount:</strong></td>
+
+                    <td style="font-size:21px" ng-model="mydiscount">Rs {{mydiscount}}</td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="font-size:21px"><strong>Sale :</strong></td>
+
+                    <td style="font-size:21px" ng-model="mysale">Rs {{mysale}}</td>
+                </tr>
+                <tr>
+                    <td style="font-size:21px" style="border: none;"></td>
+                </tr>
+                <tr>
+                    <td style="border: none;"></td>
+                </tr>
+                <tr>
+                    <td style="font-size:21px" style="border: none;"></td>
+                </tr>
+                <tr style="border-top:2px solid">
+                    
+                    <td style="font-size:21px" ng-model="cash"><strong>Paid:</strong></td>
+                    <td style="font-size:19px">Rs {{cash}}</td>
+					<td></td>
+                    <td style="font-size:21px" ng-model="return"><strong>Return:</strong>  </td>
+                    <td style="font-size:21px ">Rs {{return}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+        </br>   
+        <hr />
+        <p style="font-size:22px" align="center"><b>Thank You For Shopping!</b></p>
+        
+    </div>
+    
+    <center>
+           
+    <!-- <center><a onclick="print()" class="btn btn-lg btn-success">Print</a></center> -->
+    <center><a ng-click="print()" class="btn btn-lg btn-success">Print</a></center>
+
+        
+
+</modal>
+

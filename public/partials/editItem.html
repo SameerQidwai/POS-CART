@@ -1,0 +1,122 @@
+<div class="row">
+    <h1 class="col-md-10"> Inventory</h1>
+</div>
+<hr>
+<div class="row ">
+    <!--inventoey system-->
+    <input ng-model="search.$" hidden>
+    <!-- <div class="col-md-8">
+        Choose Supplier <select class="form-control" ng-model="selectedSupplier.supplierId"
+            ng-options="supplier.supplierId as supplier.name for supplier in chooseSupplier"
+            ng-change="getCate(selectedSupplier.supplierId)" placeholder="Select Supplier"></select>
+    </div> -->
+
+        <div class="col-md-4 col-sm-4">
+            Choose Category
+            <input class="form-control" ng-model="edit.cat" type="text" ng-model-options="{debounce:1000}"
+                ng-change="function(edit.cat,edit.Tindex)" list="categoryList">
+            <datalist id="categoryList">
+                <option ng-repeat="category in chooseCategories" value='{{category.name}}'></option>
+            </datalist>
+        </div>
+
+        <div class="col-md-4 col-sm-4">
+            Search<input class="form-control " type="text" ng-model="search.barcode" placeholder="Search by Barcode">
+
+        </div>
+        <div class="col-md-4 col-sm-4">
+            &nbsp;<input class="form-control " type="text" ng-model="search.itemName" placeholder="Search by Name">
+            <datalist id="itemList">
+                <option ng-repeat="item in items" value='{{item.itemName}}'></option>
+            </datalist>
+        </div>
+
+    <div class="col-md-9" style="margin: 20px 0">
+        <span ng-repeat="user in use track by $index">
+            <span class="btn-group btn btn-primary btn-sm catGBtn" ng-hide='$index == 0'>
+                <label ng-model="edit.index" ng-init="edit.Tindex=$index" class="catLabel">{{user}}</label>
+                <label type="button" ng-click="removeCat($index)"><i class="solo fa fa-times"></i> </label>
+            </span>
+        </span>
+    </div>
+
+
+    <!-- inventory field table according to the supplier-->
+    <table class="table table-bordered table-hover table-striped ">
+        <thead>
+            <tr>
+                <th>Delete Item</th>
+                <th>Barcode</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Code</th>
+                <th>supplier</th>
+                <th>Category</th>
+                <th>Wholesale </th>
+                <th>MRP</th>
+                <th>Retail </th>
+                <th>Qty in stock</th>
+                <th>update</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in items | filter :search ">
+                <td><button type="button" ng-click="delete(item)" class="btn btn-sm btn-danger">Delete</button>
+                </td>
+                <!--generate barcode for the item-->
+                <td>{{item.barcode}}</td>
+                <!--ng-init="editItemName=item.itemName"-->
+                <td><input class="form-control" type="text" ng-model="edit[$index].ItemName"
+                        ng-init="edit[$index].ItemName=item.itemName"></td>
+                <td><input class="form-control" type="text" ng-model="edit[$index].ItemDesc"
+                        ng-init="edit[$index].ItemDesc=item.itemDesc"></td>
+                <td><input class="form-control" type="text" ng-model="edit[$index].Type"
+                        ng-init="edit[$index].Type=item.type"></td>
+                <td><input class="form-control" type="text" ng-model="edit[$index].Size"
+                        ng-init="edit[$index].Size=item.size"></td>
+                <td><input class="form-control" type="text" ng-model="edit[$index].Code"
+                        ng-init="edit[$index].Code=item.code"></td>
+                <td><input class="form-control" type="text" ng-model="edit[$index].ItemSupplier"
+                        ng-init="edit[$index].ItemSupplier=item.itemSupplier"></td>
+                <td><input class="form-control" type="text" ng-model="edit[$index].ItemCategory"
+                        ng-init="edit[$index].ItemCategory=item.category" ng-click="showItemCat(item.itemCategory)">
+                </td>
+                <td><input class="form-control" type="number" ng-model="edit[$index].ItemWholesale"
+                        ng-init="edit[$index].ItemWholesale=item.itemWholesale"></td>
+                <td><input class="form-control" type="number" ng-model="edit[$index].MRP"
+                        ng-keydown="conversion($event,$index)" placeholder="MRP%"></td>
+                <td><input class="form-control" type="number" ng-model="edit[$index].ItemRetail"
+                        ng-init="edit[$index].ItemRetail=item.itemRetail"></td>
+                <td><input class="form-control" type="number" ng-model="edit[$index].ItemQty"
+                        ng-init="edit[$index].ItemQty=item.itemQty"></td>
+
+                <td>
+                    <button class="btn btn-md btn-info" ng-click="updateItem(item,$index)">Update</button>
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
+
+
+
+    <modal title="Item Category" visible="itemCategoryModal">
+        <div class="row">
+            <div class="editItemCat" ng-repeat="cat in thisCat track by $index">
+                <input class="form-control" ng-model="cat" style="width: 110px;" disabled>
+            </div>
+            <hr>
+            <div class="editChangeCat" ng-repeat="user in use">
+                <input class="form-control" ng-model="addcat[$index]" ng-change="itemfunction(addcat[$index],$index)"
+                    ng-model-options="{debounce:1000}" style="width: 110px;" list='thisList'>
+                <datalist id="thisList">
+                    <option ng-repeat="category in itemCategories" value='{{category.name}}'></option>
+                </datalist>
+            </div>
+        </div>
+        <hr>
+        <button class="btn btn-md btn-success" ng-click="editCategory()">Edit Category</button>
+    </modal>

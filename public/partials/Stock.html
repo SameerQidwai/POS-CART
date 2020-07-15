@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">Check Stock</h1>
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+<!-- /.panel-heading -->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div>
+          <strong>Enter Barcode:</strong><input type="text" ng-model="barcodeCheck" class="form-control"
+            aria-label="..." ng-keypress="checkStock($event)">
+        </div>
+        <div >
+          <hr />
+          <br />
+          <table class="table table-bordered table-hover table-striped " ng-show="stockShow">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Category</th>
+                <th>Wholesale Price</th>
+                <th>Retail Price</th>
+                <th>Total Price</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-model='sale'>
+                <td>{{sale.itemName}}</td>
+                <td>{{sale.itemDesc}}</td>
+                <td>{{sale.itemQty}}</td>
+                <td>{{sale.itemCategory}}</td>
+                <td>Rs {{sale.itemWholesale}}</td>
+                <td>Rs {{sale.itemRetail}}</td>
+                <td ng-model="totalLeft">Rs {{totalLeft}}</td>
+
+
+              </tr>
+
+            </tbody>
+          </table>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

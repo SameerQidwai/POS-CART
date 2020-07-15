@@ -1,0 +1,205 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">Data Entry</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                New Category and New Supplier
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6">
+
+                    <button type="button" ng-click="addCat()" class="btn btn-md btn-primary"
+                        style="margin-top: 3px;">Add Category</button>
+                    </br>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" ng-click="addSupplierModal = !addSupplierModal" class="btn btn-md btn-primary"
+                        style="margin-top: 3px;">Add Supplier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="row">
+    <div class="row" style="padding-left: 23px;">
+        <button type="button" ng-click="newEntry()" class="btn btn-lg btn-success">New Entry</button>
+        <button type="button" ng-click="OldEntry()" class="btn btn-lg btn-success">Old Entry</button>
+    </div>
+</div>
+<br />
+<br />
+<div class="row" ng-show="oldEntry">
+    <div class="col-lg-12" ng-show="oldEntry">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Update Data Entry
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <button style="float: left;" ng-click="Reload()"
+                        class="btn btn-sm btn-info col-md-2  ">Refresh</button>
+                    <br />
+                    <center><em>Note: Please Refresh When you add new Category or Supplier.</em></center>
+                    <br />
+                </div>
+                <br />
+                <strong>Enter Barcode:</strong><input type="text" ng-model="barcodeCheck" class="form-control"
+                    aria-label="..." ng-keypress="checkStock($event)">
+
+
+                <div class='row'>
+                    <hr />
+                    <br />
+
+                    <table class="table table-bordered table-hover table-striped " ng-show="stockShow">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Category</th>
+                                <th>Wholesale Price</th>
+                                <th>Retail Price</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-model='sale'>
+                                <td>{{sale.itemName}}</td>
+                                <td>{{sale.itemDesc}}</td>
+                                <td>{{sale.itemQty}}</td>
+                                <td>{{sale.itemCategory}}</td>
+                                <td>Rs {{sale.itemWholesale}}</td>
+                                <td>Rs {{sale.itemRetail}}</td>
+                                <td ng-model="totalLeft">Rs {{totalLeft}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+                <input ng-show="stockShow" type="number" class="form-control" aria-label="..." min="1"
+                    placeholder="Add Quantity in Stock" ng-model='myQty'>
+                <br />
+                <button type="button" ng-click="generateOld()" ng-show="stockShow"
+                    class="btn btn-lg btn-success">Generate Barcode</button>
+
+                <!-- /.table-responsive -->
+
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>
+<!-- /.col-lg-12 -->
+<div class="row" ng-show="NewEntry">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                New Data Entry
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="row">
+                    <button ng-click="Reload()" class="btn btn-sm btn-info col-md-2  ">Refresh</button>
+                    <br />
+                    <center><em>Note: Please Refresh When you add new Category or Supplier.</em></center>
+                    </br>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <form>
+
+                        <input type="text" class="form-control" aria-label="..." placeholder="Item Name"
+                            ng-model='itemName'>
+                        </br>
+                        <textarea class="form-control" aria-label="..." placeholder="Item Description"
+                            ng-model='itemDesc'></textarea>
+                        </br>
+                        <input type="number" class="form-control" aria-label="..." min="1" placeholder="Qty"
+                            ng-model='itemQty'>
+                        </br>
+                        <di v class="row" style=" padding-left: 10px;">
+                            <div> Choose Category</div>
+                            <div ng-repeat="user in use" class="col-md-2 CatSelect" >
+
+                                <input class="form-control" ng-model="add.cat[$index]" type="text"
+                                    ng-change="addfunction(add.cat[$index],$index)" ng-model-options="{debounce:1000}" list="categoryList">
+
+                                <datalist id="categoryList">
+                                    <option ng-repeat="category in chooseCategories" value='{{category.name}}'></option>
+                                </datalist>
+                            </div>
+                        </div>
+                        <!-- <select class="form-control" ng-model="selectedCategories.categoryId"
+                            ng-options="category.categoryId as category.name for category in chooseCategories"></select> -->
+                        Choose Supplier <select class="form-control" ng-model="selectedSupplier.categoryId"
+                            ng-options="category.categoryId as category.name for category in chooseSupplier"></select>
+                        </br>
+                        <input type="number" class="form-control" aria-label="..." min="1" placeholder="WholeSale Price"
+                            ng-model='itemWholesale'>
+                        </br>
+                        <input type="text" class="form-control" aria-label="..." min="1" placeholder="Available Sizes"
+                            ng-model='type'>
+                        </br>
+                        <input type="number" class="form-control" aria-label="..." min="1" placeholder="This Size"
+                            ng-model='size'>
+                        </br>
+                        <input type="text" class="form-control" aria-label="..." min="1" placeholder="Supplier Code"
+                            ng-model='code'>
+                        </br>
+
+                        <input type="number" class="form-control" aria-label="..." min="1" placeholder="Retail Price"
+                            ng-model='itemRetail'>
+                        </br>
+                        <!-- <input type="number" class="form-control" aria-label="..." min="1" placeholder="Max Discount on item"
+                            ng-model='itemDiscount'>
+                        </br> -->
+                        <!-- Add item Discount to customer-->
+                        <button type="button"
+                            ng-click="generateBarcode(selectedSupplier.categoryId)"
+                            class="btn btn-lg btn-success">Generate Barcode</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<barcode style="display: none;" food="food"></barcode>
+
+<modal title="Add new Category" visible="addCategoryModal">
+    <div class="row">
+        <div ng-repeat="user in use" class="col-md-3 CatSelect">
+
+            <input class="form-control" ng-model="add.cat[$index]" type="text"
+                ng-change="function(add.cat[$index],$index)" list="categoryList" ng-model-options="{debounce:1000}">
+
+            <datalist id="categoryList">
+                <option ng-repeat="category in chooseCategories" value='{{category.name}}'></option>
+            </datalist>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <center><button type="button" ng-click="insertNewCat()" class="btn btn-md btn-success">Add</button></center>
+    </div>
+</modal>
+
+<modal title="Add New Supplier" visible="addSupplierModal">
+    <input type="text" class="form-control" placeholder="Supplier Name" ng-model='supName'>
+    <hr>
+    <center><button type="button" ng-click="addSupp(supName)" class="btn btn-md btn-success">Add
+            Supplier</button></center>
+</modal>

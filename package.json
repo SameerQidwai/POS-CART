@@ -1,0 +1,40 @@
+{
+  "name": "node-js-getting-started",
+  "version": "0.1.5",
+  "description": "A sample Node.js app using Express 4",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "ejs": "3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "moment": "^2.24.0",
+    "mongodb": "^3.4.1",
+    "mongodb-restore": "^1.6.2",
+    "mongoose": "5.8.5",
+    "monk": "^7.1.2",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "remove-node-modules": "^1.7.6",
+    "string": "^3.3.3",
+    "update-notifier": "^4.0.0",
+    "util": "^0.12.1"
+  },
+  "engines": {
+    "node": "12.13.0"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}

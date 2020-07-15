@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Point Of Sale</title>
+    <link rel="shortcut icon" href="lang-logo.png">
+    <!-- Bootstrap Core CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="bower_components/angular-print/angularPrint.css" rel="stylesheet">
+
+
+    <!-- Timeline CSS -->
+    <link href="dist/css/timeline.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap3.min.css" rel="stylesheet" id="bootstrap-css">
+
+
+
+    <!-- Custom Fonts -->
+    <style type="text/css" media="print">
+        @media all {
+            .page-break {
+                display: none;
+            }
+
+            /* body, */
+            body {
+                color: black;
+            }
+
+            html,
+            #wrapper {
+                width: 100%;
+                height: 100%;
+                overflow: visible;
+            }
+        }
+
+        @media print {
+            .page-break {
+                display: block;
+                page-break-before: always;
+
+            }
+
+            body {
+                color: black;
+            }
+
+            html,
+            #wrapper {
+                width: 100%;
+                height: 100%;
+                overflow: visible;
+            }
+        }
+
+        @media screen and (max-width:768px) {
+            .mobile {
+                overflow-x: scroll;
+            }
+        }
+    </style>
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js" rel="stylesheet" type="text/css"> -->
+   
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body ng-app="myApp">
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom: 0" ng-show="loggedOut">
+            <!-- <div class="container-fluid">-->
+            <div class="navbar-header" role="navigation">
+                <!-- <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button> -->
+                <div class="navbar-brand">
+                    <a id="menu-toggle" href="#" style="color:darkgray"
+                        class="glyphicon glyphicon-align-justify btn-menu toggle">
+                        <!-- <i class="fa fa-bars"></i> -->
+                    </a>
+                    <a href="#/pos">DressUp</a>
+                </div>
+            </div>
+
+            <ul class="nav navbar-top-links navbar-right">
+                <span class="navbar-brand" align="right"></span>
+                <span class="navbar-brand" style="padding:0 ;padding-left: 10px; padding-right: 30px;">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle row" data-toggle="dropdown">
+                            <span class="fa fa-user solo"></span> <span class="fa fa-caret-down solo"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+
+                            <li class="divider"></li>
+
+                            <li><a ng-href="#"><i class="fa fa-sign-out solo"></i> Logout</a></li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                </span>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- </div> -->
+        </nav>
+        <!-- Sidebar ng-show="loggedOut"-->
+        <div id="sidebar-wrapper" role="navigation" ng-show="loggedOut">
+            <nav id="spy">
+                <ul class="sidebar-nav navbar-default nav navbar-collapse" style="width:100%; font-weight: bold;"
+                    id="side-menu">
+                    <li class="sidebar-brand">
+                        <a ng-href="#/posCart"><span class="fa fa-table solo">POS</span></a>
+
+                    </li>
+                    <li>
+                        <a ng-href="#/addNewCust"> <span class="fa fa-user solo"> Add Customer</span></a>
+                    </li>
+                    <li>
+                        <a ng-href="#/lastSale">
+                            <span class="fa fa-table solo">Last Sold Items</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a class="row"><span class="fa fa-sitemap solo col-sm-10">
+                            <p style="padding-left:12px">Stock Management</p>
+                        </span><span class="fa arrow col-sm-2"></span></a>
+                        <ul class="nav">
+                            <li>
+                                <a ng-href="#/dataEntry"> New Item Entry</a>
+                            </li>
+                            <!-- <li>
+                                <a ng-href="#/newBill">Add NewBill & Payment</a>
+                            </li> -->
+
+                            <!-- <li>
+                                <a ng-href="#/CustomerBill">Customer Bill</a>
+                            </li> -->
+                            <li>
+                                <!-- <a ng-href="#/dataEntry"> New Item Entry</a> -->
+                                <a ng-href="#/editItem"> Inventory</a>
+                            </li>
+                            <li>
+                                <!-- <a ng-href="#/dataEntry"> New Item Entry</a> -->
+                                <a ng-href="#/stockInventory">Generate Bill</a>
+                                <!--Because of the requirment-->
+
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="row">
+                            <span class="fa fa-info solo col-sm-10">
+                                <p style="padding-left:20px ;">Customer</p>
+                            </span><span class="fa arrow solo col-sm-2"></span>
+                        </a>
+                        <ul class="nav">
+                            <li>
+                                <a ng-href="#/CustomerDetail">Customer Detail</a>
+                            </li>
+                            <!-- <li>
+                                <a ng-href="#/CustomerBill">Customer Bill</a>
+                            </li> -->
+                            <!--Because of the requirment-->
+
+                    </li>
+                </ul>
+                </li>
+                <!-- <li>
+                    <a class="row"><span class="fa fa-sitemap solo col-sm-10">
+                            <p style="padding-left:12px">Stock Management</p>
+                        </span><span class="fa arrow col-sm-2"></span></a>
+                    <ul class="nav ">
+                        <li>
+                            <a ng-href="#/Stock">Check Item Stock</a>
+                        </li>
+                    </ul>
+                </li> -->
+                <li>
+                    <a class="row">
+                        <span class="fa fa-edit solo col-sm-10">
+                            <p style="padding-left:20px ;">Supplier</p>
+                        </span><span class="fa arrow solo col-sm-2"></span>
+                    </a>
+                    <ul class="nav">
+                        <li>
+                            <a ng-href="#/supplierDetail">Supplier's Details</a>
+                        </li>
+                        <li>
+                            <a ng-href="#/supplierLedger">Supplier's Ledger</a>
+                        </li>
+                        <!--Because of the requirment-->
+                    </ul>
+                </li>
+                <li>
+                    <a class="row">
+                        <span class="fa fa-sitemap solo col-md-10">
+                            <p style="padding-left:20px ;">Reports</p>
+                        </span><span class="fa arrow solo col-md-2"></span>
+                    </a>
+                    <ul class="nav">
+                        <li>
+                            <a ng-href="#/dailyReport">Daily Sale's Report</a>
+                        </li>
+                        <li>
+                            <a ng-href="#/customSalesReport">Weekly Sale's Report</a>
+                        </li>
+                        <li>
+                            <a ng-href="#/salesReport">Monthly Sale's Report</a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="row">
+                        <span class="fa fa-male solo col-md-10">
+                            <p style="padding-left:20px;">Salesman</p>
+                        </span><span class="fa arrow col-md-2"></span>
+                    </a>
+                    <ul class="nav">
+                        <li>
+                            <a ng-href="#/addSalesman"> Add New Saleman</a>
+                        </li>
+                        <li>
+                            <a ng-href="#/SmanReport">Salesman's Report</a>
+                        </li>
+                    </ul>
+
+                </li>
+                <li>
+                    <a ng-href="#/userGuide"><span class="fa fa-edit solo"> User Guide </span></a>
+                </li>
+
+            </nav>
+        </div>
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+            <div class="container" style="width:100% ">
+                <ng-view></ng-view>
+            </div>
+        </div>
+    </div>
+
+
+    <!--for toggle sidebar-->
+    <script src="js\jquery-1.11.1.min.js"></script>
+    <script src="js/bootstrap3.min.js"></script>
+
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("active");
+        });
+    </script>
+    <!--for toggle sidebar-->
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="bower_components/angular-print/angularPrint.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>  -->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="app.js"></script>
+
+    <script src="controllers.js"></script>
+    <script src="services.js"></script>
+
+    <script src="js/code128.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <!-- <script src="dist/js/sb-admin-2.js"></script> -->
+    <!-- <script src="js/bootstrap.js"></script> -->
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+    <!-- <script src="js/jquery.js"></script> -->
+    <!-- <script src="js/jquery.min.js"></script> -->
+    <!--Materialize js-->
+    <script src="dist/js/sb-admin-2.js"></script>
+
+    <!--Materialize js-->
+
+
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+<div class="row">
+    <div class="col-lg-7">
+        <h1>Supplier Ledger</h1>
+    </div>
+    <h1 ng-show="whenTable">
+        <button type="button" ng-click="showBill()" class="btn btn-md btn-info col-lg-2">New Bill</button>
+        <span class="col-lg-1"></span>
+        <button type="button" ng-click="showPay()" class="btn btn-md btn-info col-lg-2">New Payment</button>
+    </h1>
+</div>
+<hr>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <strong>Choose Supplier <select class="form-control" ng-model="selectedSupplier.categoryId"
+                        ng-options="category.categoryId as category.name for category in chooseSupplier"
+                        ng-change="getSup(selectedSupplier.categoryId)"></select></strong>
+                </br>
+                <div ng-show="whenTable">
+                    <strong class="clo-md-12">Filter Result :</strong>
+                    <input type="text" id="query" class="form-control col-md-8" ng-model="query" width="0" />
+
+                </div>
+                <br />
+                <p align="left" ng-show="whenTable" ng-model="date"><b>Date:</b> {{date}} </p>
+                <hr />
+                <!-- /.table-responsive -->
+                <div class='row' ng-show="whenTable">
+                    <table class="table table-hover ">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Bill No</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                                <th>Balance</th>
+                                <th>Bill</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat='sale in sales | filter:query | orderBy: _id'>
+                                <td>{{sale.date}}</td>
+                                <td>{{sale.bill_No}}</td>
+                                <td>Rs. {{sale.debit}}</td>
+                                <td>Rs. {{sale.credit}}</td>
+                                <td>Rs. {{sale.debit-sale.credit}}</td>
+                                <td ng-if="sale.purchaseItems"><button type="button" ng-click="getByBillNo(sale)"
+                                        class="btn btn-sm btn-info">showBill</button></td>
+                            </tr>
+                            <tr style="font-weight: bold;">
+                                <td></td>
+                                <td></td>
+                                <td>Rs. {{totalDebit}}</td>
+                                <td>Rs. {{totalCredit}}</td>
+                                <td>Rs. {{totalDebit-totalCredit}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </br>
+                    <hr />
+
+                    <p align="center">**************** Supplier's Report ****************</p>
+                    <!-- <a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a> -->
+                    <div class="col-sm-5"></div>
+                    <center><a ng-click="print()" class="btn btn-lg btn-success col-sm-2 ">Print</a></center>
+                </div>
+            </div>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+
+<modal title="Supplier Receipt" visible="showReturnModal">
+    <div print-section>
+        <center><img src="/img/img1.png" alt="DressUP" style="width:25%"></center>
+        <center>
+            <div style="margin:0">
+                <p style="margin:0"><strong>Phone: +923452652950</strong></p>
+                <p style="margin:0"><strong>6.N.R.Avenue (Tapal Bldg) SD-I,Block-G <br>Barkat-e-Hyderi North
+                        Nazimabad,Karachi</strong></p>
+            </div>
+        </center>
+        <hr />
+        <h3 align="center">Supplier's Details</h3>
+        <br />
+
+        <p align="left" ng-model="date"><b>Date:</b> {{date}} </p>
+
+        <hr />
+        <br />
+        <table class="table table-hover ">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Bill No</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='s in sales | filter:query | orderBy: _id'>
+                    <td>{{s.date}}</td>
+                    <td>{{s.bill_No}}</td>
+                    <td>Rs. {{s.debit}}</td>
+                    <td>Rs. {{s.credit}}</td>
+                    <td>Rs. {{s.debit-s.credit}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <p align="center">**************** Supplier's Report ****************</p>
+        <p align="center"><b>Thank You For Shopping!!</b></p>
+        
+    </div>
+    <center><a href="javascript:window.print() " class="btn btn-lg btn-success">Print</a></center>
+</modal>
+
+<modal title="Supplier Bill" visible="showPurchase">
+    <div print-section>
+        <center><img src="/img/img1.png" alt="DressUP" style="width:50%"></center>
+        <center>
+            <div style="margin:0" style="font-size:21px">
+                <p style="margin:0"><strong>Phone: +923452652950</strong></p>
+                <p style="margin:0"><strong>6.N.R.Avenue (Tapal Bldg.) SD-I, Block-G
+                        <br>Barkat-e-Hyderi North Nazimabad, Karachi</strong></p>
+            </div>
+        </center>
+        <hr>
+        <h3 align="center">Purchase Receipt</h3>
+        <br />
+        <div class="row" style="font-size:18px">
+            <span class="col-md-6" ng-model="mdate"><strong>Date:</strong> {{slipDate}} </span>
+            <span class="col-md-4" style="text-transform: capitalize;"><strong>Supplier:</strong> {{slipSupplier}}
+            </span>
+            <br>
+            <br>        
+            <span class="col-md-6"><strong>Bill No:</strong>{{slipNo}}</span>
+        </div>
+        <table class="table table-hover font-size:18px">
+            <thead style="border-bottom:2px solid">
+                <tr style="border-bottom:2px solid;">
+                    <th>Qty.</th>
+                    <th>Barcode</th>
+                    <th>Name&nbsp;&nbsp;&nbsp;</th>
+                    <th>Description</th>
+                    <th>Price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='item in showItems'>
+                    <td>{{item.additem}}</td>
+                    <td>{{item.barcode}}</td>
+                    <td>{{item.itemName}}</td>
+                    <td>{{item.itemDesc}}</td>
+                    <td>Rs {{item.itemWholesale}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <strong>Total Items:{{totalit}}</strong>
+        <br /><br />
+        <hr />
+        <div style="font-size:19px" align="center">
+            <p><b>Thank You For Shopping!</b></p>
+            
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <span class="col-md-3"></span>
+        <a ng-click="printSlip()" class="btn btn-lg btn-success col-md-2">Print</a>
+        <span class="col-md-2"></span>
+        <a ng-click="printBarcode(showItems)" class="btn btn-lg btn-success col-md-3">Print Barcodes</a>
+    </div>
+    </br>
+
+</modal>
+
+<modal title="ADD NEW BILL" visible=showbill>
+
+    <center><span style="text-transform: capitalize;">
+            <h3>Supplier: {{supplierChoose}}</h3>
+        </span></center>
+    <br>
+    <form>
+        </br>
+        <input type="text" class="form-control" placeholder="Bill No.." ng-model='bill_No'>
+        </br>
+
+        <input type="number" class="form-control" min="0" placeholder="Debit Rs" ng-model='debit' value='0'>
+        </br>
+
+        <input type="number" class="form-control" min="0" placeholder="Credit Rs" ng-model='credit' value='0'>
+        </br>
+
+        <center><button type="button" ng-click="addBill(bill_No,debit,credit)" class="btn btn-lg btn-success">Add
+                Bill</button></center>
+
+    </form>
+</modal>
+
+<modal title="PAYMENT" visible=showpay>
+
+    <center><span style="text-transform: capitalize;">
+            <h3>Supplier: {{supplierChoose}}</h3>
+        </span></center>
+    <br>
+    <form>
+        </br>
+        <input type="text" class="form-control" placeholder="Bill No.." ng-model='bill_No'>
+        </br>
+
+        <input type="number" class="form-control" min="0" placeholder="Debit Rs" ng-model='debit' value='0'>
+        </br>
+
+        <input type="number" class="form-control" min="0" placeholder="Credit Rs" ng-model='credit' value='0'>
+        </br>
+
+        <center><button type="button" ng-click="addBill(bill_No,debit,credit)"
+                class="btn btn-lg btn-success">PAY</button></center>
+
+    </form>
+</modal>
+<barcode style="display: none;" food="food"></barcode>

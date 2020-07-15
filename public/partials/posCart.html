@@ -1,0 +1,344 @@
+<div class="row">
+    <h1 class="col-md-4 col-sm-4 col-xs-4" style="margin:10px; padding:15px">Point Of Sale</h1>
+    <div class='col-md-4 col-sm-4 col-xs-4' style='margin:15px'>
+        <p align="center" ng-model="date"><strong>Date: </strong>{{date}} </p>
+        <p align="center" ng-model="mytime"><strong>Time:&nbsp;&nbsp;</strong>{{mytime}} </p>
+    </div>
+    <button ng-click="Reload()" class="btn btn-sm btn-info col-md-2 col-sm-2 col-xs-4"
+        style="float:right;margin:10px 0 2px 0">Refresh</button>
+
+    <button ng-click="creditItemModal = !creditItemModal" class="btn btn-sm btn-primary col-md-2 col-sm-2 col-xs-4"
+        style="float:right;margin:5px 0 0 0">Credit
+        Item</button>
+
+</div>
+<hr>
+
+<!-- <input ng-model="search.$" hidden>
+<div>Search Item</div>
+<div class="col-md-4 left-pos">
+    <input class="form-control" ng-model="search.itemName" type="text" list="itemList">
+    <datalist id="itemList">
+        <option ng-repeat="item in products" value='{{item.itemName}}'></option>
+    </datalist>
+</div>
+
+<div class="col-md-2">
+    <a class="btn btn-sm btn-primary" ng-click="creditAdd()">credit Items</a>
+</div> -->
+<span class="row">
+    <div class="col-md-6 col-sm-6 col-xs-6 left-pos">
+
+        <div class="col-md-4 col-sm-4 col-xs-6" class="left-pos">
+            Choose Category
+            <input class="form-control" ng-model="add.cat" type="text" ng-model-options="{debounce:1000}"
+                ng-change="function(add.cat,add.Tindex)" list="categoryList">
+            <datalist id="categoryList">
+                <option ng-repeat="category in chooseCategories" value='{{category.name}}'></option>
+            </datalist>
+        </div>
+        <input ng-model="search.$" hidden>
+
+        <div class="col-md-5 col-sm-5 col-xs-5">
+            Search Item
+            <input class="form-control" ng-model="search.itemName" type="text" list="itemList">
+            <datalist id="itemList">
+                <option ng-repeat="item in products" value='{{item.itemName}}'></option>
+            </datalist>
+        </div>
+
+        <div class="col-md-2 col-sm-2 col-xs-2 creaditAddBtn">
+            <a class="btn btn-sm btn-primary" ng-click="creditAdd()">credit Items</a>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 margin8">
+            <span ng-repeat="user in use track by $index">
+                <span class="btn-group btn btn-primary btn-sm catGBtn" ng-hide='$index == 0'>
+                    <label ng-model="add.Tindex" ng-init="add.Tindex=$index" class="catLabel">{{user}}</label>
+                    <button type="button" ng-click="removeCat($index)" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </span>
+            </span>
+        </div>
+
+        <table class="table table-bordered table-hover table-striped mobile" col-resizeable>
+            <thead class="mobile">
+                <tr>
+                    <th>Name</th>
+                    <th>Aquantity</th>
+                    <th>Retail Price</th>
+                    <th>WholeSale Price</th>
+                    <th width="20%">Quantity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="mobile">
+                <tr ng-repeat='product in products | filter: search'>
+                    <td>{{product.itemName}}</td>
+                    <td>{{product.itemQty}}</td>
+                    <td>{{product.itemRetail}}</td>
+                    <td>{{product.itemWholesale}}</td>
+                    <td width="20%"><input class="form-control" type="number" ng-model="addQty"> </td>
+                    <td><button type="button" class="btn btn-sm btn-info"
+                            ng-click="addToCart(product,selectedCustomers.customerId,addQty)">Add</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-6 col-sm-6 col-xs-6 right-pos">
+        Choose Customer
+        <select class="form-control" ng-model="selectedCustomers.customerId"
+            ng-options="customer.customerId as customer.name for customer in chooseCustomers"
+            ng-change="customerCart(selectedCustomers.customerId)"></select>
+
+        <br>
+        <br>
+        <table class="table table-bordered table-hover table-striped mobile" style="position: relative;top: -28px;"
+            col-resizeable ng-show="customerTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Retail Price</th>
+                    <th>Quantity</th>
+                    <th>Total price</th>
+                    <th>Action <a ng-click="deleteTable()" class="btn btn-sm btn-warning ">delete</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='cProduct in cProducts'>
+                    <td>{{cProduct.itemName}}</td>
+                    <td>{{cProduct.price}}</td>
+                    <td>{{cProduct.purchasedQty}}</td>
+                    <td>{{cProduct.price*cProduct.purchasedQty}}</td>
+                    <td><button type="button" class="btn btn-sm btn-danger"
+                            ng-click=" deleteProduct(cProduct,totalPrice)">Delete</td>
+                </tr>
+            </tbody>
+            <div class="row" style=" font-weight: bold; position: relative;top: -33px;" ng-show="customerTable">
+                <span class="col-md-4 col-xs-4 " ng-model="totalPrice">Total Price: {{totalPrice}}</span>
+                <center><span class="col-md-4 col-xs-4">Debit: {{resDebit}}</span></center>
+                <span class="col-md-4 col-xs-4"><span style="float:right">Balance: {{totalPrice-resDebit}}</span></span>
+            </div>
+        </table>
+        <div class="col-md-12 col-sm-12 col-xs-12" ng-show="customerTable">
+            <center>
+                <span>
+                    <a ng-click="show()" style="width:70px" class="btn btn-sm btn-success ">Print</a>
+                </span>
+
+                <span>
+                    <a ng-click="pay()" class="btn btn-sm btn-info ">show Bill</a>
+                </span>
+                <span>
+                    <a ng-click="payTrack()" class="btn btn-sm btn-primary ">Pay track</a>
+                </span>
+            </center>
+        </div>
+    </div>
+</span>
+
+<modal title="Sale Receipt" visible="showModal">
+    <div print-section>
+        <h3 align="center">Sale Recipt</h3>
+        <hr>
+        <p style="font-size:21px ;width:50% ;float:left" align="left" ng-model="mdate"><strong>Date:</strong>
+            {{date}}
+        </p>
+        <p style="font-size:21px; width:50% ;float:right" align="left" ng-model="mtime"><strong>Time:</strong>
+            {{mytime}} </p>
+        <p style="font-size:21px"><strong>Receipt ID:</strong> {{slipId}}</p>
+        <p style="font-size:21px" style="text-transform: capitalize;"><strong>customer:</strong>
+            {{custName}} </p>
+        <hr />
+        <br />
+
+        <table class="table table-hover " col-resizeable ng-show="customerTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Retail Price</th>
+                    <th>Quantity</th>
+                    <th>Total price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='cProduct in cProducts'>
+                    <td>{{cProduct.itemName}}</td>
+                    <td>{{cProduct.price}}</td>
+                    <td>{{cProduct.purchasedQty}}</td>
+                    <td>{{cProduct.price*cProduct.purchasedQty}}</td>
+                </tr>
+            </tbody>
+            <div class="row">
+
+            </div>
+        </table>
+        </br>
+        <div class="row" style=" font-weight: bold; position: relative;top: -33px;" ng-show="customerTable">
+            <span class="col-md-4 " ng-model="totalPrice">Total Price: {{totalPrice}}</span>
+            <center><span class="col-md-4">Debit: {{resDebit}}</span></center>
+            <span class="col-md-4"><span style="float:right">Balance: {{totalPrice-resDebit}}</span></span>
+        </div>
+        <hr />
+        <p style="font-size:22px" align="center"><b>Thank You For Shopping!</b></p>
+       
+    </div>
+
+
+    <!-- <center><a onclick="print()" class="btn btn-lg btn-success">Print</a></center> -->
+    <center><a ng-click="print()" class="btn btn-lg btn-success">Print</a></center>
+
+
+
+</modal>
+
+<modal title="Payment" visible="payModal">
+    <p>Name:<b>{{custName}}</b></p>
+    <p>Receipt ID:<b>{{slipId}}</b></p>
+    <hr>
+    <div class="row" style=" font-weight: bold;">
+        <span class="col-md-3">Total Price: {{totalPrice}}</span>
+        <center><span class="col-md-3">Debit: {{resDebit}}</span></center>
+        <center><span class="col-md-3">Discount: {{discount}}</span></center>
+        <span class="col-md-3"><span style="float:right">Balance: {{balance}}</span></span>
+    </div>
+    <hr>
+    <form id="form_id">
+        Debit:<input type="number" class="form-control" id="debit" ng-model='debit'>
+        </br>
+        <div class="form-check">
+            <input class="form-check-input" id="check" type="checkbox" ng-model="paid" value="false">
+            <label for="my-input" class="form-check-label">Paid</label>
+        </div>
+        <span ng-show="paid">
+            Discount:<input id="discount" type="number" class="form-control" ng-init="discount=0"
+                ng-keydown="giveDiscount($event,discount,totalPrice,resDebit)" ng-model='discount'>
+        </span>
+        <hr>
+        <center><button type="button" ng-click="UpdateBill(selectedCustomers.customerId,debit,paid,discount)"
+                class="btn btn-lg btn-success">Add Bill / Payment</button></center>
+
+    </form>
+</modal>
+
+<modal title="Waning alert" class="alert alert-warning" visible="alertBox">
+    <center>
+        <h3>Available Item <b>{{data1.itemQty}}</b> Sale Item <b>{{data3}}</b></h3>
+    </center>
+    <center>
+        <h5>Do You Still Wanna Enter Sale?</h5>
+    </center>
+    <hr>
+    <div align="right">
+        <button class="btn btn-md btn-warning" ng-click="yes(data1,data2,data3)">Continue</button>
+        <button class="btn btn-md btn-info" ng-click="cancel()">Cancel</button>
+    </div>
+</modal>
+
+<modal title="Credit Item" visible="creditItemModal">
+
+    <input class="form-control m5px" ng-init="shop=''" placeholder="shop" type="text" ng-model="shop">
+    <input class="form-control m5px" ng-init="itemName=''" placeholder="ItemName" type="text" ng-model="itemName">
+    <input class="form-control m5px" ng-init="wholesale=''" placeholder="wholeSale" type="number" ng-model="wholesale">
+    <input class="form-control m5px" ng-init="retailPrice=''" placeholder="retailPrice" type="number"
+        ng-model="retailPrice">
+    <input class="form-control m5px" ng-init="Quantity=''" placeholder="Quantity" type="number" ng-model="Quantity">
+    <hr>
+    <div class="col-md-offset-9">
+        <button class="btn btn-sm btn-info" ng-click="detail()">Detail</button>
+        <button class="btn btn-sm btn-success"
+            ng-click="addCreditItem(shop,itemName,wholesale,retailPrice,Quantity)">Add Item</button>
+    </div>
+</modal>
+
+<modal title="Available Credit Item" visible="creditAddModal">
+    <table class="table table-bordered table-hover table-striped mobile" col-resizeable>
+        <thead class="mobile">
+            <tr>
+                <th>shop</th>
+                <th>Name</th>
+                <th>Aquantity</th>
+                <th>Retail Price</th>
+                <th>WholeSale Price</th>
+                <th width="10%">Quantity</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="mobile">
+            <tr ng-repeat='item in items | filter: search'>
+                <td>{{item.shop}}</td>
+                <td>{{item.itemName}}</td>
+                <td>{{item.Qty}}</td>
+                <td>{{item.retailPrice}}</td>
+                <td>{{item.wholesale}}</td>
+                <td width="10%"><input class="form-control" type="number" ng-model="addQty"> </td>
+                <td><button type="button" class="btn btn-sm btn-info"
+                        ng-click="addToCartFromCredit(item,selectedCustomers.customerId,addQty)">Add</td>
+            </tr>
+        </tbody>
+    </table>
+</modal>
+
+<modal title="credit Detail" visible="detailModal">
+    <table class="table table-bordered table-hover table-striped mobile" col-resizeable>
+        <thead class="mobile">
+            <tr>
+                <th>shop</th>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Credit Qty</th>
+                <th>A. Qty</th>
+                <th>Retail</th>
+                <th>WholeSale</th>
+                <th>Due</th>
+            </tr>
+        </thead>
+        <tbody class="mobile">
+            <tr ng-repeat='item in items | filter: search'>
+                <td>{{item.shop}}</td>
+                <td>{{item.date}}</td>
+                <td>{{item.itemName}}</td>
+                <td>{{item.getQty}}</td>
+                <td>{{item.Qty}}</td>
+                <td>{{item.retailPrice}}</td>
+                <td>{{item.wholesale}}</td>
+                <td ng-if="item.due"><a class="btn-floating btn-sm btn-default paid" ng-click="payUnpay(item)"><i
+                            class="fa fa-check"></i></a></td>
+                <td ng-if="!item.due"><a class="btn-floating btn-sm btn-default unPaid" ng-click="payUnpay(item)"><i
+                            class="fa fa-times"></i></td>
+            </tr>
+        </tbody>
+    </table>
+</modal>
+
+<modal title="Payment Track" visible="paymentTrack">
+    <div class="row">
+        <p class="col-md-4">Name:<b>{{custName}}</b></p>
+        <p class="col-md-6">Receipt ID:<b>{{slipId}}</b></p>
+    </div>
+    <div class="row">
+        <p class="col-md-3">Total: <b>{{totalPrice}}</b></p>
+        <p class="col-md-3">Debit: <b>{{resDebit}}</b></p>
+        <p class="col-md-3">Balance: <b>{{totalPrice - resDebit}}</b></p>
+    </div>
+    <hr>
+
+    <div>
+        <table class="table table-hover ">
+            <thead>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Payment</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="attock in showTrack | filter: search">
+                    <td>{{attock.date}}</td>
+                    <td>{{attock.time}}</td>
+                    <td>{{attock.payment}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <center><button ng-click="paymentTrack=false" class="btn btn-md btn-primary">close</button></center>
+    </div>
+</modal>

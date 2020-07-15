@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Add New Customer</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <button ng-click="Reload()" class="btn btn-sm btn-info col-md-2  ">Refresh</button>
+                </div>
+                <br>
+                <input class="form-control" placeholder="Name" ng-model="name">
+                <br>
+                <br>
+                <input class="form-control" placeholder="Phone #" ng-model="phone">
+                <br>
+                <br>
+                <input class="form-control" placeholder="Address" ng-model="address">
+                <br>
+                <br>
+                <input class="form-control" placeholder="Email" ng-model="email">
+                <br>
+                <br>
+                <button type="button" ng-click="addCust()" class="btn btn-lg btn-success">Add</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,315 @@
+<div class="row">
+    <h1 class="col-md-10">
+        <a ng-href="#/dataEntry" style="color: black; text-decoration-line: none;"> Add Bill</a>
+    </h1>
+    <h1><button type="button" ng-click="showSAdd()" class="btn btn-lg btn-info col-md-2">Add Supplier</button></h1>
+    <!--This shows to add new supplier-->
+</div>
+<hr>
+<div class="row">
+    <!-- search filter-->
+    <input ng-model="search.$" hidden>
+    <div class="col-md-2 col-sm-2 col-xs-1" class="left-pos">
+        Choose Category
+        <input class="form-control" ng-model="cat" placeholder="Serach By Cat" type="text"
+            ng-model-options="{debounce:1000}" ng-change="function(cat,add.Tindex)" list="categoryList">
+        <datalist id="categoryList">
+            <option ng-repeat="category in chooseCategories" value='{{category.name}}'></option>
+        </datalist>
+    </div>
+
+    <div class="col-md-2">
+        Search<input class="form-control " type="text" ng-model="search.barcode" placeholder="Search by Barcode">
+
+    </div>
+    <div class="col-md-2">
+        &nbsp;<input class="form-control" type="text" ng-model="search.itemName" placeholder="Search by Name"
+            list="itemList">
+        <datalist id="itemList">
+            <option ng-repeat="item in items" value='{{item.itemName}}'></option>
+        </datalist>
+    </div>
+    <div class="col-md-3">
+        Choose Supplier <select class="form-control" ng-model="selectedSupplier.supplierId"
+            ng-options="supplier.supplierId as supplier.name for supplier in chooseSupplier"
+            ng-change="getCate(selectedSupplier.supplierId)" placeholder="Select Supplier">
+            <option value="" disabled selected hidden>Select Supplier</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        Bill No<input class="form-control" placeholder="Enter Bill No" ng-model="bill_No">
+    </div>
+</div>
+<div class="row ">
+    <!--inventoey system-->
+    <div class="col-md-6 col-sm-6 col-xs-6 margin8">
+        <span ng-repeat="user in catuse track by $index">
+            <span class="btn-group btn btn-primary btn-sm catGBtn" ng-hide='$index == 0'>
+                <label ng-model="add.Tindex" ng-init="add.Tindex=$index" class="catLabel">{{user}}</label>
+                <button type="button" ng-click="removeCat($index)" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </span>
+        </span>
+    </div>
+    <div class="col-md-3">
+        Total Balance:
+        <h1 style="margin:0"><span style="font-weight: bolder;">{{balance}}</span></h1>
+    </div>
+
+    <div class="col-md-1" style="padding-left: 0;">
+        Debit <input class="form-control " type="number" ng-model="debit" ng-init="debit=0" placeholder="Debit">
+    </div>
+    <div class="col-md-1" style="padding-left: 0;">
+
+        Credit<input class="form-control " type="number" ng-model="credit" ng-init="credit=0" placeholder="Credit">
+    </div>
+    &nbsp;<button type="button" class="btn btn-md btn-success col-md-1" ng-click="showbill()">Generate</button>
+</div>
+
+<!-- Bill No -->
+
+
+<br />
+<br />
+<div class="row">
+    <!-- inventory field table according to the supplier-->
+    <table class="table table-bordered table-hover table-striped ">
+        <thead>
+            <tr width="8%">
+                <th width="8%">Generate Barcode</th>
+                <th>Barcode</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Code</th>
+                <th>Category</th>
+                <th>Wholesale </th>
+                <th>Retail </th>
+                <th>Total Price</th>
+                <th>Qty in stock</th>
+                <th width="8%">Add Qty</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in items | filter :search ">
+                <td><button type="button" ng-click="barcode(item)" class="btn btn-sm btn-info">print</button></td>
+                <!--genrate barcode for the item-->
+                <td>{{item.barcode}}</td>
+                <td>{{item.itemName}}</td>
+                <td>{{item.itemDesc}}</td>
+                <td>{{item.type}}</td>
+                <td>{{item.size}}</td>
+                <td>{{item.code}}</td>
+                <td ng-click="showItemCat(item.itemCategory)">{{item.category}}</td>
+                <td>Rs {{item.itemWholesale}}</td>
+                <td>Rs {{item.itemRetail}}</td>
+                <td ng-model="totalLeft">Rs {{item.itemWholesale*item.itemQty}}</td>
+                <td>{{item.itemQty}}</td>
+                <td> <input type="number" tabindex="1" class="form-control" ng-model="additem[$index]"
+                        ng-keydown="addinStock($event,item,additem[$index],$index)"></td>
+                <!--add item into supplier bill-->
+            </tr>
+            <tr ng-If="addTrue">
+                <!-- add NEw item to the selected supplier-->
+                <td colspan="2"><input class="form-control" ng-model="add.name" ng-init="add.name =''" type="text"
+                        placeholder="Name"></td>
+                <td colspan="2"><input class="form-control" ng-model="add.decs" ng-init="add.decs =''" type="text"
+                        placeholder="Description"></td>
+                <td><input class="form-control" ng-model="add.type" ng-init="add.type =''" type="text"
+                        placeholder="Type"></td>
+
+                <td><input class="form-control" ng-model="add.size" ng-init="add.size =''" type="text"
+                        placeholder="Size"></td>
+
+                <td><input class="form-control" ng-model="add.code" ng-init="add.code =''" type="text"
+                        placeholder="Code"></td>
+
+                <!-- category list and input -->
+                <td><input class="form-control" ng-model="add.category" ng-init="add.category =''" type="text"
+                        placeholder="Category" ng-focus="newItemCat()">
+                </td>
+                <!-- category list and input END -->
+
+                <td><input class="form-control" ng-model="add.WholeRs" ng-init="add.WholeRs =''" type="number"
+                        placeholder="WholeSale"></td>
+
+                <td ng-show="Rs" ng-click="inRs()">{{showMRP}}%</td>
+                <!--show this if enter retail price in money-->
+                <td ng-show="per"><input class="form-control" type="number" ng-init="MRP =''"
+                        ng-keydown="conversion($event)" ng-model="add.MRP" placeholder="MRP"></td>
+                <!--show this if retail price is in %-->
+
+                <td ng-show="per" ng-click="inRs()">{{showRetail}}Rs</td>
+                <!--show this if retail price is in %-->
+                <td ng-show="Rs"><input class="form-control" ng-model="add.retailRs" type="number"
+                        ng-init="add.retailRs =''" placeholder="retail" ng-keydown="conversion($event)"></td>
+                <!--show this if enter retail price in money-->
+
+                <td><input class="form-control" ng-model="add.additem" type="number" ng-init="add.additem =''"
+                        placeholder="add Qty"></td>
+
+                <td><button class="btn btn-md btn-success" style="width:90px" ng-click="addNewItem($index)">Add</button>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+    <!-- /.table-responsive -->
+</div>
+<modal title="Supplier Bill" visible="showPurchase">
+    <div print-section>
+        <center><img src="/img/img1.png" alt="DressUP" style="width:50%"></center>
+        <center>
+            <div style="margin:0" style="font-size:21px">
+                <p style="margin:0"><strong>Phone: +923452652950</strong></p>
+                <p style="margin:0"><strong>6.N.R.Avenue (Tapal Bldg.) SD-I, Block-G
+                        <br>Barkat-e-Hyderi North Nazimabad, Karachi</strong></p>
+            </div>
+        </center>
+        <hr>
+        <h3 align="center">Purchase Receipt</h3>
+        <br />
+        <div class="row" style="font-size:21px">
+            <span class="col-md-6" ng-model="mdate"><strong>Date:</strong> {{mdate}} </span>
+            <span class="col-md-6" ng-model="mtime"><strong>Time:</strong> {{mtime}} </span>
+            <br>
+            <br>
+            <span class="col-md-6" style="text-transform: capitalize;"><strong>Supplier:</strong> {{supplierChoose}}
+            </span>
+            <span class="col-md-6"><strong>Bill No:</strong>{{bill_No}}</span>
+        </div>
+        <table class="table table-hover font-size:21px">
+            <thead style="border-bottom:2px solid">
+                <tr style="border-bottom:2px solid;">
+                    <th>Qty.</th>
+                    <th>Barcode</th>
+                    <th>Name&nbsp;&nbsp;&nbsp;</th>
+                    <th>Description</th>
+                    <th>Price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='s in purchased'>
+                    <td>{{s.additem}}</td>
+                    <td>{{s.barcode}}</td>
+                    <td>{{s.itemName}}</td>
+                    <td>{{s.itemDesc}}</td>
+                    <td>Rs {{s.itemWholesale}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row" style="font-size:18px">
+            <label class="col-md-6">Total Items:{{totalit}}</label>
+            <label class="col-md-4">Total Balance: {{balance}}</label>
+            <span class="col-md-6"></span>
+            <label class="col-md-3">Debit: {{debit}}</label>
+            <label class="col-md-3">Credit: {{credit}}</label>
+        </div>
+        <br /><br />
+        <hr />
+        <div style="font-size:22px" align="center">
+            <p><b>Thank You For Shopping!</b></p>
+         
+        </div>
+    </div>
+    <hr />
+    <center><a ng-click="printSlip()" class="btn btn-lg btn-success">Print</a></center>
+    </br>
+
+</modal>
+<modal title="print Barcode" visible="barcodemodal">
+    <input class="form-control" type="number" id="pqty" placeholder="Enter Quantity to print Barcode"
+        ng-model="printQty">
+    <br />
+    <center><a ng-click="printOldBarcode(printQty,PitemBar)" class="btn btn-lg btn-success">Print</a></center>
+
+</modal>
+
+<modal title="Bill Amount" visible="balanceModal">
+    <form>
+        <label style="font-size: 21px;">Total Balance: {{balance}}</label>
+        <br>
+        Debit:
+        <input class="form-control" tabindex="0" type="number" ng-keydown="enter($event)" placeholder="Enter Debit"
+            ng-model="debit" autofocus>
+        Credit:
+        <input class="form-control" tabindex="1" type="number" ng-keydown="enter($event)" placeholder="Enter credit"
+            ng-model="credit">
+        <br>
+        <center><a ng-click="enterBalance(debit,credit)" tabindex="2" class="btn btn-lg btn-success">Print</a></center>
+    </form>
+</modal>
+
+<modal title="Add New Supplier" visible="showAddSupplier">
+    <!--Add New supplier-->
+    <form>
+        <input type="text" class="form-control" aria-label="..." placeholder="Supplier Name" ng-model='supName'>
+        <br>
+        <center><button type="button" ng-click="addSupp(supName)" class="btn btn-lg btn-success"
+                style="margin-top: 3px;">Add Supplier</button></center>
+    </form>
+    <!-- /.table-responsive -->
+    <!-- /.col-lg-12 -->
+</modal>
+
+<modal title="Item Category" visible="itemCategoryModal">
+    <hr>
+    <div class="row">
+        <div style="display: inline-flex; margin-right:3px;" ng-repeat="cat in thisCat track by $index"
+            ng-hide="$index==0">
+            <input class="form-control" ng-model="cat" style="width: 110px;" disabled>
+        </div>
+    </div>
+    <hr>
+</modal>
+
+<modal title="Item Category" visible="AddCategoryModal">
+    <div class="editChangeCat" ng-repeat="catuser in catuse">
+        <input class="form-control" ng-model="addcat[$index]" ng-change="function(addcat[$index],$index)"
+            ng-model-options="{debounce:1000}" style="width: 110px;" list='thisList'>
+        <datalist id="thisList">
+            <option ng-repeat="category in chooseCategories" value='{{category.name}}'></option>
+        </datalist>
+    </div>
+    <hr>
+    <button class="btn btn-md btn-success" ng-click="AddCategoryModal=!AddCategoryModal">Add Category</button>
+</modal>
+<modal title="Purcahse Price" visible="itemPrice">
+    <div id="itemPurchase">
+        <div class="row" style="margin:2%">
+            <span class="col-md-1"></span>
+            <label for="price" class="col-md-1" style="font-size: 18px;">Price: </label>
+            <div class="col-md-3">
+                <input class="form-control" id="price" ng-model="add.price">
+            </div>
+            <span class="col-md-1"></span>
+            <div for="method" class="col-md-3"><label style="float:right; font: size 16px">Cost Method: </label> </div>
+            <div class="col-md-3">
+                <select class="form-control" id="method" ng-model="method" list='opList'>
+                    <option value="Manual">Manual</option>
+                    <option value="LCP">Last Price Cost</option>
+                    <option value="MA">Moving Average</option>
+                </select>
+            </div>
+        </div>
+        <div ng-if="method">
+            <div ng-if="method=='Manual'" class="row">
+                <span class="col-md-3"></span>
+                <div class="col-md-2">
+                    <label style="font-size: 18px; float:right">Manual:</label>
+                </div>
+                <div class="col-md-5">
+                    <input type="number" ng-model="add.manualPrice" class="form-control">
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <center><button class="btn btn-md btn-success"
+            ng-click="methodFunction(method,add.price,add.manualPrice)">Submit</button>
+    </center>
+</modal>
+<!-- /.row -->
+<barcode style="display: none;" food="food"></barcode>
